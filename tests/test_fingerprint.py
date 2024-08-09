@@ -41,3 +41,9 @@ class TestFinterprint(unittest.TestCase):
     def test_sql_long(self):
         self.assertEqual(fingerprint("SELECT *, sleep(1) from tbl where pk = 1 or pk = 2 or pk = 3 or pk = 4 or pk = 5 or pk = 6 or pk = 7 or pk = 8 or pk = 9 or pk = 10 or pk = 11"),
                          "select *, sleep(?) from tbl where pk = ? or pk = ? or pk = ? or pk = ? or pk = ? or pk = ? or pk = ? or pk = ? or pk = ? or pk = ? or pk = ?")
+
+    def test_sql_comment(self):
+        self.assertEqual(fingerprint("select id from posts /*application:Joe's app,controller:my_controller*/"),
+                         "select id from posts /*application:Joe's app,controller:my_controller*/")
+        self.assertEqual(fingerprint("select id from posts /*application='Joe\\'s app',controller='my_controller*/"),
+                    "select id from posts /*application='Joe\\'s app',controller='my_controller*/")
